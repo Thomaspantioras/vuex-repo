@@ -57,9 +57,7 @@
  
 <script>
 import { mapGetters } from 'vuex';
-// import { mapGetters, mapMutations } from 'vuex';
 
-//TODO validation in form
 export default {
   name: 'RetirementForm',
   components: {},
@@ -70,7 +68,6 @@ export default {
       highFundSizeThreshold: 150000,
       retirementDate: null,
       pensionFundSize: null,
-      retirementProductCode: null,
       hidden: false
     };
   },
@@ -86,73 +83,46 @@ export default {
   },
   methods: {
     onSubmit() {
-      const age = this.age;
-      const comparisonAge = this.comparisonAge;
-      const lowFundSizeThreshold = this.lowFundSizeThreshold;
-      const highFundSizeThreshold = this.highFundSizeThreshold;
-      const pensionFundSize = this.pensionFundSize;
-
-      this.retirementProductCode = this.calculateRetirementProductCode(
-        age,
-        comparisonAge,
-        lowFundSizeThreshold,
-        highFundSizeThreshold,
-        pensionFundSize
-      );
-
       let userRetirementData = {
         retirementDate: this.retirementDate,
         pensionFundSize: '£' + this.pensionFundSize,
-        retirementProductCode: this.retirementProductCode
+        retirementProductCode: this.calculateRetirementProductCode()
       };
 
       this.$emit('user-retirement-data-submitted', userRetirementData);
       this.hidden = true;
     },
 
-    calculateRetirementProductCode(
-      age,
-      comparisonAge,
-      lowFundSizeThreshold,
-      highFundSizeThreshold,
-      pensionFundSize
-    ) {
-      return age >= comparisonAge
+    calculateRetirementProductCode() {
+      return this.age >= this.comparisonAge
         ? this.getProductCodeOverComparisonAge(
-            pensionFundSize,
-            lowFundSizeThreshold,
-            highFundSizeThreshold
+            this.pensionFundSize,
+            this.lowFundSizeThreshold,
+            this.highFundSizeThreshold
           )
         : this.getProductCodeUnderComparisonAge(
-            pensionFundSize,
-            lowFundSizeThreshold
+            this.pensionFundSize,
+            this.lowFundSizeThreshold
           );
     },
 
-    getProductCodeOverComparisonAge(
-      pensionFundSize,
-      lowFundSizeThreshold,
-      highFundSizeThreshold
-    ) {
-      return pensionFundSize >= highFundSizeThreshold
-        ? 'Product 122'
-        : pensionFundSize >= lowFundSizeThreshold
-        ? 'Product 121'
-        : 'Product 120';
+    getProductCodeOverComparisonAge() {
+      if (this.pensionFundSize >= this.highFundSizeThreshold) {
+        return 'Product 122';
+      }
+
+      if (this.pensionFundSize >= this.lowFundSizeThreshold) {
+        return 'Product 121';
+      }
+
+      return 'Product 120';
     },
 
-    getProductCodeUnderComparisonAge(pensionFundSize, lowFundSizeThreshold) {
-      return pensionFundSize > lowFundSizeThreshold
+    getProductCodeUnderComparisonAge() {
+      return this.pensionFundSize > this.lowFundSizeThreshold
         ? 'Product 111'
         : 'Product 110';
     },
-    // ...mapMutations([
-    //   'updateFullName',
-    //   'updateDateOfBirth',
-    //   'updatePostcode',
-    //   'updateTelephoneNumber',
-    //   'updateEmail'
-    // ])
 
     updateFullName(event) {
       this.$store.commit('updateFullName', event.target.value);

@@ -69,8 +69,6 @@ export default {
       mediumRateOfPropertyValue: 37.5,
       highRateOfPropertyValue: 48.0,
       propertyValue: null,
-      equityProductCode: null,
-      equityReleaseValuation: null,
       hidden: false
     };
   },
@@ -86,88 +84,46 @@ export default {
   },
   methods: {
     onSubmit() {
-      const age = this.age;
-      const comparisonAge = this.comparisonAge;
-      const propertyValue = this.propertyValue;
-      const propertyValueThreshold = this.propertyValueThreshold;
-
-      const equityProductCode = this.calculateEquityReleaseProductCode(
-        age,
-        comparisonAge,
-        propertyValue,
-        propertyValueThreshold
-      );
-
-      this.equityProductCode = equityProductCode;
-
-      const lowRateOfPropertyValue = this.lowRateOfPropertyValue;
-      const mediumRateOfPropertyValue = this.mediumRateOfPropertyValue;
-      const highRateOfPropertyValue = this.highRateOfPropertyValue;
-
+      const equityProductCode = this.calculateEquityReleaseProductCode();
       const equityReleaseValuation = this.getEquityReleaseValuationByProductCode(
-        equityProductCode,
-        age,
-        propertyValue,
-        lowRateOfPropertyValue,
-        mediumRateOfPropertyValue,
-        highRateOfPropertyValue
+        equityProductCode
       );
-
-      this.equityReleaseValuation = equityReleaseValuation ? '£' + equityReleaseValuation : 'n/a';
 
       let userEquityReleaseData = {
         propertyValue: '£' + this.propertyValue,
-        equityProductCode: this.equityProductCode,
-        equityReleaseValuation: this.equityReleaseValuation
+        equityProductCode,
+        equityReleaseValuation
       };
 
       this.$emit('user-equity-release-data-submitted', userEquityReleaseData);
       this.hidden = true;
     },
 
-    calculateEquityReleaseProductCode(
-      age,
-      comparisonAge,
-      propertyValue,
-      propertyValueThreshold
-    ) {
-      return age >= comparisonAge && propertyValue >= propertyValueThreshold
+    calculateEquityReleaseProductCode() {
+      return this.age >= this.comparisonAge &&
+        this.propertyValue >= this.propertyValueThreshold
         ? 'Product 222'
         : 'Product 211';
     },
 
-    getEquityReleaseValuationByProductCode(
-      equityProductCode,
-      age,
-      propertyValue,
-      lowRateOfPropertyValue,
-      mediumRateOfPropertyValue,
-      highRateOfPropertyValue
-    ) {
+    getEquityReleaseValuationByProductCode(equityProductCode) {
       return equityProductCode === 'Product 222'
-        ? this.valueEquityRelease(
-            age,
-            propertyValue,
-            lowRateOfPropertyValue,
-            mediumRateOfPropertyValue,
-            highRateOfPropertyValue
-          )
-        : null;
+        ? this.valueEquityRelease()
+        : 'n/a';
     },
 
-    valueEquityRelease(
-      age,
-      propertyValue,
-      lowRateOfPropertyValue,
-      mediumRateOfPropertyValue,
-      highRateOfPropertyValue
-    ) {
-      //TODO no need to check if over 55 as should called only if product 122 in which this is true.
-      return age < 65
-        ? propertyValue * (lowRateOfPropertyValue / 100)
-        : age < 75
-        ? propertyValue * (mediumRateOfPropertyValue / 100)
-        : propertyValue * (highRateOfPropertyValue / 100);
+    valueEquityRelease() {
+      if (this.age < 65) {
+        return '£' + this.propertyValue * (this.lowRateOfPropertyValue / 100);
+      }
+
+      if (this.age < 75) {
+        return (
+          '£' + this.propertyValue * (this.mediumRateOfPropertyValue / 100)
+        );
+      }
+
+      return '£' + this.propertyValue * (this.highRateOfPropertyValue / 100);
     },
 
     updateFullName(event) {
@@ -185,14 +141,6 @@ export default {
     updateEmail(event) {
       this.$store.commit('updateEmail', event.target.value);
     }
-
-    //  ...mapMutations([
-    //   'updateFullName',
-    //   'updateDateOfBirth',
-    //   'updatePostcode',
-    //   'updateTelephoneNumber',
-    //   'updateEmail'
-    // ])
   }
 };
 </script>

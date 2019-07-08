@@ -31,13 +31,13 @@ const store = new Vuex.Store({
     },
     //TODO getters are like computed, are cashing. Think again about new Date(). Look also the algorithm to understand and refactoring
     age: state => {
-      let today = new Date();
+      const today = new Date();
       if (state.userDetails.dateOfBirth) {
-        let birthDate = new Date(state.userDetails.dateOfBirth);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        let m = today.getMonth() - birthDate.getMonth();
+        const birthDate = new Date(state.userDetails.dateOfBirth);
+        const age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          age = age - 1;
+          return age - 1;
         }
         return age;
       }
