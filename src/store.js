@@ -29,7 +29,6 @@ const store = new Vuex.Store({
     email: state => {
       return state.userDetails.email;
     },
-    //TODO getters are like computed, are cashing. Think again about new Date(). Look also the algorithm to understand and refactoring
     age: state => {
       const today = new Date();
       if (state.userDetails.dateOfBirth) {
