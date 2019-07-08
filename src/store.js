@@ -4,7 +4,6 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  strict: true, //TODO delete it after developing
   state: {
     userDetails: {
       fullName: null,
@@ -13,10 +12,7 @@ const store = new Vuex.Store({
       telephoneNumber: null,
       email: null
     }
-    // showRetirementLink: true,
-    // showEquityLink: false
   },
-  // TODO you will not need every property here if no any computation needed. may delete their getters
   getters: {
     fullName: state => {
       return state.userDetails.fullName;
@@ -64,82 +60,7 @@ const store = new Vuex.Store({
       state.userDetails.email = email;
     }
   },
-  actions: {
-    //TODO move this to retirement form component in computed or methods. RetirementProductCode have to be in local state
-    // calculateRetirementProductCode({ commit }, age) {
-    //   const ageLimit = 55;
-    //   const lowerFundSizeLimit = 50000;
-    //   const upperFundSizeLimit = 150000;
-    //   let retirementProductCode;
-    //   const pensionFundSize = this.state.userDetails.pensionFundSize;
-    //   const getProductCodeOverAgeLimit = (
-    //     pensionFundSize,
-    //     lowerFundSizeLimit,
-    //     upperFundSizeLimit
-    //   ) => {
-    //     if (pensionFundSize > upperFundSizeLimit) {
-    //       retirementProductCode = 'Product 122';
-    //     } else if (pensionFundSize > lowerFundSizeLimit) {
-    //       retirementProductCode = 'Product 121';
-    //     } else {
-    //       retirementProductCode = 'Product 120';
-    //     }
-    //   };
-    //   const getProductCodeUnderAgeLimit = (
-    //     pensionFundSize,
-    //     lowerFundSizeLimit
-    //   ) => {
-    //     if (pensionFundSize > lowerFundSizeLimit) {
-    //       retirementProductCode = 'Product 111';
-    //     } else {
-    //       retirementProductCode = 'Product 110';
-    //     }
-    //   };
-    //   if (age > ageLimit) {
-    //     getProductCodeOverAgeLimit(
-    //       pensionFundSize,
-    //       lowerFundSizeLimit,
-    //       upperFundSizeLimit
-    //     );
-    //     // if (pensionFundSize > secondFundSizeLimit) {
-    //     //   retirementProductCode = 'Product 122';
-    //     // } else if (pensionFundSize > firstFundSizeLimit) {
-    //     //   retirementProductCode = 'Product 121';
-    //     // } else {
-    //     //   retirementProductCode = 'Product 120';
-    //     // }
-    //   } else {
-    //     getProductCodeUnderAgeLimit(pensionFundSize, lowerFundSizeLimit);
-    //     // if (pensionFundSize > firstFundSizeLimit) {
-    //     //   retirementProductCode = 'Product 111';
-    //     // } else {
-    //     //   retirementProductCode = 'Product 110';
-    //     // }
-    //   }
-    // commit('updateRetirementProductCode', retirementProductCode);
-    // }
-    // increment({ commit }) {
-    //   commit('increment');
-    // },
-    // //async calculations
-    // asyncIncrement({ commit }) {
-    //   setTimeout(() => {
-    //     commit('increment');
-    //   }, 1000);
-    // },
-    // //Let's say we pass a payload eg duration
-    // asyncIncrement({ commit }, duration) {
-    //   setTimeout(() => {
-    //     commit('increment');
-    //   }, duration);
-    // },
-    // //or
-    // asyncIncrement: ({ commit }, asyncNum) => {
-    //   setTimeout(() => {
-    //     commit('increment', asyncNum.by);
-    //   }, asyncNum.dur);
-    // }
-  }
+  actions: {}
 });
 
 export default store;
